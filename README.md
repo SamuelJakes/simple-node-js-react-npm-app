@@ -1,6 +1,7 @@
 # simple-node-js-react-npm-app
 
-adding extra line
+More details on running jenkins for this Nodejs setup can be found here:
+https://www.jenkins.io/doc/tutorials/build-a-node-js-and-react-app-with-npm/
 
 
 This repository is for the
@@ -15,3 +16,23 @@ The `jenkins` directory contains an example of the `Jenkinsfile` (i.e. Pipeline)
 you'll be creating yourself during the tutorial and the `scripts` subdirectory
 contains shell scripts with commands that are executed when Jenkins processes
 the "Test" and "Deliver" stages of your Pipeline.
+
+Running Jenkins through docker:
+
+docker container run --name jenkins-docker --rm --detach \
+  --privileged --network jenkins --network-alias docker \
+  --env DOCKER_TLS_CERTDIR=/certs \
+  --volume jenkins-docker-certs:/certs/client \
+  --volume jenkins-data:/var/jenkins_home \
+  --volume "$HOME":/home \
+  --publish 3000:3000 docker:dind
+
+Running this tutorial, also in docker:
+
+docker container run --name jenkins-tutorial --rm --detach \
+  --network jenkins --env DOCKER_HOST=tcp://docker:2376 \
+  --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 \
+  --volume jenkins-data:/var/jenkins_home \
+  --volume jenkins-docker-certs:/certs/client:ro \
+  --volume "$HOME":/home --publish 8080:8080 jenkinsci/blueocean
+
